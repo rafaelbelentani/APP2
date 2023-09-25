@@ -4,10 +4,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './src/pages/Login/index/';
 import PaginaPrincipal from './src/pages/PaginaPrincipal/index/';
-import Cadastro from './src/pages/Cadastro/index/';
-import Recuperar from './src/pages/Recuperar/index';
-import CheckList from './src/pages/CheckList';
 import Apontamento from './src/pages/Apontamento'
+import Contarpecas from './src/pages/contarpecas';
+import Pedidoadicional from './src/pages/pedidoadicional';
+import Saldocliente from './src/pages/saldocliente';
+import Fecharentrega from './src/pages/fecharentega';
 
 
 function HomeScreen() {
@@ -25,10 +26,12 @@ function App() {
       <Stack.Navigator>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Pagina Principal" component={PaginaPrincipal} />
-        <Stack.Screen name="Cadastro" component={Cadastro} />
-        <Stack.Screen name="Recuperar" component={Recuperar} />
-        <Stack.Screen name="Check List" component={CheckList} />
-        <Stack.Screen name="Apontamento" component={Apontamento} />
+        <Stack.Screen name="CS" component={Apontamento} />
+        <Stack.Screen name="Contar Peças" component={Contarpecas} />
+        <Stack.Screen name="Saldo Cliente" component={Saldocliente} />
+        <Stack.Screen name="Pedido Adicional" component={Pedidoadicional} />
+        <Stack.Screen name="Fechar Entrega" component={Fecharentrega} />
+     
       </Stack.Navigator>
     </NavigationContainer>
   );

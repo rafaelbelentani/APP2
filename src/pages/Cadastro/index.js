@@ -5,13 +5,14 @@ import { Input, CheckBox } from 'react-native-elements';
 import { BackgroundImage } from 'react-native-elements/dist/config';
 import { ScrollView } from 'react-native-gesture-handler';
 import { TextInputMask } from 'react-native-masked-text';
+import usuarioService from '../../services/UsuarioService';
 
 
 
 export default function Cadastro({navigation}) {
 
   const [email, setEmail] = useState(null)
-  const [password, setPassword] = useState(null)
+  const [senha, setSenha] = useState(null)
   const [nome, setNome] = useState(null)
   const [telefone, setTelefone] = useState(null)
   const [isSelected, setSelected] = useState(false)
@@ -19,6 +20,7 @@ export default function Cadastro({navigation}) {
   const [errorEmail, setErrorEmail] = useState(null)
   const [errorTelefone, setErrorTelefone] = useState(null)
   const [errorSenha, setErrorSenha] = useState(null)
+  const [isLoading, setLoading] = useState(false)
   
   let telefoneField = null
 
@@ -43,17 +45,36 @@ export default function Cadastro({navigation}) {
     setErrorTelefone("Preencha seu telefone corretamente")
     error = true  
   } 
-  if (password ==null){
+  if (senha ==null){
     setErrorSenha("Preencha sua senha corretamente")
     error = true  
   }
   return !error
   }
 
-  const cadastrar = () => {
+  const salvar = () => {
     if(validar()){
-    navigation.navigate("Pagina Principal")
-    console.log("Salvou")
+      setLoading(true)
+
+      let data = {      
+        nome: nome,
+        email: email,
+        telefone: telefone,
+        senha: senha,
+      }
+
+    usuarioService.cadastrar(data)
+    .then((response) => {
+      setLoading(false)
+      const titulo = (response.data.status) ? "Sucesso!" : "Erro!"
+      Alert.alert(titulo, response.data.mensagem)
+      console.log(response.data)
+    })
+    .catch((error) => {
+      setLoading(false)
+      Alert.alert("Erro", "Houve um erro inesperado.")
+    })
+   
     }
   }
 
@@ -121,7 +142,7 @@ export default function Cadastro({navigation}) {
               placeholder= 'Senha'
               style={styles.input}
               errorMessage={errorSenha}
-              onChangeText={value => setPassword(value)}
+              onChangeText={value => setSenha(value)}
               secureTextEntry={true}
               />   
 
@@ -135,15 +156,19 @@ export default function Cadastro({navigation}) {
                 onPress={() => setSelected(!isSelected)}
               />        
 
+            { isLoading &&
+            <Text>Carregando...</Text>
+            }
 
+
+              {!isLoading &&
             <TouchableOpacity
              style={styles.cadastrar}
-             onPress={ () => {cadastrar ()} }
+             onPress={ () => {salvar ()} }
             >
             <Text style={styles.botaoText} >Cadastrar</Text>
-
             </TouchableOpacity>
-            
+            }
     </KeyboardAvoidingView>
   );
 }
