@@ -1,15 +1,57 @@
 import { BackgroundImage } from 'react-native-elements/dist/config';
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView,KeyboardAvoidingView, ScrollView,  } from 'react-native';
+import { Text, View, SafeAreaView,KeyboardAvoidingView, ScrollView, Alert  } from 'react-native';
 import { StyleSheet} from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';  
 import { FontAwesome } from '@expo/vector-icons';
+import coletaService from '../../services/ColetaService copy';
+import detalhecoletaService from '../../services/DetalheColetaService';
 
 
-export default function Contarpecas({navigation}) {
-        navigation.navigate("Contar Peças");
-       
+export default function Contarpecas() {
+  
+  const [quantidade, setQuantidade] = useState(null)
+  const [errorQuantidade, setErrorQuantidade] = useState(null)
+  const [data_hora, setData_hora] = useState(null)
+  const [errorData_hora, setErrorData_hora] = useState(null)
+  const [isLoading, setLoading] = useState(false)
+
+
+  const validar = () => {
+    let error = false
+    
+
+    return !error
+  }
+
+  const salvar = () => {
+    if(validar()){
+    setLoading(true)
+
+      let data = {
+      data_hora: currentDateWithMoment,
+      pedido: "Normal",
+      item: "Guardanapo",
+      status: "Aberto",
+      quantidade: quantidade,
+      }
+
+    coletaService.cadastrar(data)
+    .then((response) => {
+      setLoading(false)
+      Alert.alert("Sucesso", "Coleta Cadastrada Com Sucesso.")
+      console.log
+      detalhecoletaService.cadastrar(data)
+    })
+    .catch((error) => {
+      setLoading(false)
+      Alert.alert("Erro", "Houve um erro inesperado.")
+      console.log
+    })
+
+  }
+  }
 
         const [currentDateWithMoment, setcurrentDateWithMoment] = useState('') 
       useEffect(() => {
@@ -71,10 +113,14 @@ return (
 <View style={styles.container4}>
   <View style={styles.itens3}>
   <Text style={styles.itens2}> Guardanapo: </Text>  
+
   <TextInput  
   keyboardType='phone-pad'
   returnKeyType='done'
-  style={styles.quantidade2}  />
+  style={styles.quantidade2} 
+  onChangeText={value => setQuantidade(value)} 
+  errorMessage={errorQuantidade}/>
+
   </View>
 </View>
 
@@ -84,7 +130,7 @@ return (
   <TextInput 
   keyboardType='phone-pad'
   returnKeyType='done'
-  style={styles.quantidade2}  />
+  style={styles.quantidade2} />
   </View>
 </View>
 
@@ -178,17 +224,30 @@ return (
   </View>
 </View>
 
+            <View style={styles.containerMask}            
+              placeholder= 'Data_hora'
+                onChangeText={value => {setData_hora(value)
+                                      setErrorData_hora(null)}}
+                errorMessage={setErrorData_hora}
+            />   
+           
 
-<TouchableOpacity
+           { isLoading &&
+            <Text>Carregando...</Text>
+            }
+
+
+            {!isLoading &&
+            <TouchableOpacity 
              style={styles.cadastrar}
-             onPress={ () => {botaoentrega ()} }>
+             onPress={ () => {salvar ()} }>
             <Text style={styles.botaoText} >Fechar Coleta</Text>
             </TouchableOpacity> 
-
+}
     </ScrollView>
     </KeyboardAvoidingView>
 );
-}
+} 
 
 
 

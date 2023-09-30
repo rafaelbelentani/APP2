@@ -1,20 +1,55 @@
 import { BackgroundImage } from 'react-native-elements/dist/config';
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView,KeyboardAvoidingView, ScrollView,  } from 'react-native';
+import { Text, View, SafeAreaView,KeyboardAvoidingView, ScrollView, Alert  } from 'react-native';
 import { StyleSheet} from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';  
 import { FontAwesome } from '@expo/vector-icons';
+import coletaService from '../../services/ColetaService copy';
+import { Input } from 'react-native-elements';
 
 
+export default function PedidoAdicional() {
+  const [data_hora, setData_hora] = useState(null)
+  const [errorData_hora, setErrorData_hora] = useState(null)
+  const [isLoading, setLoading] = useState(false)
 
 
+  const validar = () => {
+    let error = false
+    setErrorData_hora(null)
+    
+    if (data_hora == true){
+      setErrorData_hora("Preencha o Status corretamente")
+      error = true  
+    }
 
+    return !error
+  }
 
+  const salvar = () => {
+    if(validar()){
+    setLoading(true)
 
-export default function PedidoAdicional({navigation}) {
-        navigation.navigate("Pedido Adicional");
-       
+      let data = {
+      data_hora: currentDateWithMoment,
+      pedido: "Adicional",
+      }
+
+    coletaService.cadastrar(data)
+    .then((response) => {
+      setLoading(false)
+      Alert.alert("Sucesso", "Coleta Cadastrada Com Sucesso.")
+      console.log
+    })
+    .catch((error) => {
+      setLoading(false)
+      Alert.alert("Erro", "Houve um erro inesperado.")
+      console.log
+    })
+
+  }
+  }
 
         const [currentDateWithMoment, setcurrentDateWithMoment] = useState('') 
       useEffect(() => {
@@ -183,17 +218,30 @@ return (
   </View>
 </View>
 
+            <View style={styles.containerMask}            
+              placeholder= 'Data_hora'
+                onChangeText={value => {setData_hora(value)
+                                      setErrorData_hora(null)}}
+                errorMessage={setErrorData_hora}
+            />   
+           
 
-<TouchableOpacity
+           { isLoading &&
+            <Text>Carregando...</Text>
+            }
+
+
+            {!isLoading &&
+            <TouchableOpacity 
              style={styles.cadastrar}
-             onPress={ () => {botaoentrega ()} }>
+             onPress={ () => {salvar ()} }>
             <Text style={styles.botaoText} >Fechar Coleta</Text>
             </TouchableOpacity> 
-
+}
     </ScrollView>
     </KeyboardAvoidingView>
 );
-}
+} 
 
 
 
