@@ -1,0 +1,14 @@
+GITHUB
+
+Atualizar Repositorio
+git add *
+git commit -m "Atualização"
+git push origin main
+
+Alteração de arquivos
+git add *
+git commit -m "Alteração"
+git push origin main
+
+Atualizar Projeto
+git pull origin main
