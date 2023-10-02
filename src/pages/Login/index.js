@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Alert, Image, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { Text, View, Alert, Image, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView } from 'react-native';
 import { Input } from 'react-native-elements';
 import { BackgroundImage } from 'react-native-elements/dist/config';
 import usuarioService from '../../services/UsuarioService';
 import { ActivityIndicator } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState(null)
@@ -63,7 +64,15 @@ usuarioService.loginToken(data)
 
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+    behavior={Platform.OS == "ios" ? "padding": "height"}
+    style = {[styles.container]}
+    keyboardVerticalOffset={80}
+    >
+
+<ScrollView style={[styles.container2]} >
+
+
 
 {isLoadingToken &&
   <Text>Carregando...</Text>
@@ -71,6 +80,8 @@ usuarioService.loginToken(data)
 
     {!isLoadingToken &&
     <>
+
+
 
       <BackgroundImage
             source={require('./logo.png')}
@@ -108,22 +119,32 @@ usuarioService.loginToken(data)
 
             </>
     }      
-      
-    </View>
+    
+    </ScrollView>
+    </KeyboardAvoidingView>
+
+
   );
 }
 
 const styles = StyleSheet.create({
       container: {
       flex: 1,      
-      alignItems: 'center',
       padding: 15,
       },
+
+      container2: {
+        width: '105%',
+        
+        },
+   
+  
 
   logo: {
     width: 200,
     height: 200,
     marginBottom: 100,
+    alignSelf: 'center',
     },
     
  
@@ -133,15 +154,16 @@ const styles = StyleSheet.create({
       backgroundColor: '#1E90FF',
       marginTop: 30,
       borderRadius: 4,
+      alignSelf: 'center',
       alignItems: 'center',
       justifyContent: 'center',
-      
     },
 
     botao2:{
       marginTop: 5,
       textDecorationLine: 'underline',
-      color: '#778899'
+      color: '#778899',
+      alignSelf: 'center',
     },
 
 

@@ -2,7 +2,7 @@ import { BackgroundImage } from 'react-native-elements/dist/config';
 import React, { useEffect, useState } from 'react';
 import { Text, View, SafeAreaView, Linking } from 'react-native';
 import { StyleSheet} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';  
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -38,6 +38,7 @@ import { useNavigation } from '@react-navigation/native';
       
     return (
     <View style={styles.screen}>  
+
 
     <BackgroundImage
     source={require('../Login/logo.png')}
@@ -93,6 +94,7 @@ import { useNavigation } from '@react-navigation/native';
             </TouchableOpacity>
 
             
+           
             </View>
     )  }
 
@@ -200,7 +202,8 @@ const styles = StyleSheet.create({
       marginTop: 40,
       borderRadius: 4,
       alignItems: 'center',
-      justifyContent: 'center',      
+      justifyContent: 'center', 
+         
       },
 
       roundButton2: {
@@ -211,6 +214,7 @@ const styles = StyleSheet.create({
       chat: {
       width: 50,
       height: 50,
+      
        
       
       },
